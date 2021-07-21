@@ -1,23 +1,11 @@
-/*type ButtonProps = {
-    children?: string;
-}*/
+import { ButtonHTMLAttributes } from "react";
+import '../styles/button.scss';
 
-import { useState } from "react";
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
 
-export function Button() {
-//    let counter = 0;
-
-    const [counter, setCounter] = useState(0)
-
-    function increment(){
-        setCounter(counter + 1);
-    }
-
+export function Button(props: ButtonProps) {
     return (
-        <button onClick={increment}>{counter}</button>
+        <button className="button" {...props}/>
     )
 }
 
-// export default Button;
-// text?: A interrogação significa que o texto será opicional. 
-// props.text || 'Default' -> Uso a propriedade text, e caso o texto não seja preenchido, usaremos o default.
