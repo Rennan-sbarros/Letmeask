@@ -13,11 +13,12 @@ export function Home() {
     const history = useHistory();
     const { user, signInWithGoogle } = useAuth();
 
-    async function handleCreateRoom(){
-        if(!user) {
+    async function handleCreateRoom(){     //Verifica se já não tem um usuario logado, se não abre o pop-up.
+        if(!user) {                          
            await signInWithGoogle()
         }
-            history.push('/rooms/new');
+        
+        history.push('/rooms/new');
     }
 
     return(
