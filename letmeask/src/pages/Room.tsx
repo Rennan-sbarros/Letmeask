@@ -8,6 +8,7 @@ import { FormEvent, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { database } from '../services/firebase';
 import { useEffect } from 'react';
+import { Question } from '../components/Question';
 
 type FirebaseQuestions = Record<string, {
     author: {
@@ -19,7 +20,7 @@ type FirebaseQuestions = Record<string, {
     isHighlighted: boolean;
 }>
 
-type Question = {
+type QuestionType = {
     id: string;
     author: {
         name: string;
@@ -37,7 +38,7 @@ export function Room(){
     const { user } = useAuth();
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<QuestionType[]>([]);
     const [title, setTitle] = useState('')
 
     const roomId = params.id;
@@ -45,7 +46,7 @@ export function Room(){
     useEffect(() => { //Uma função que dispara um evento sempre que uma informação mudar.
         const roomRef = database.ref(`rooms/${roomId}`);
 
-        roomRef.once('value', room => { 
+        roomRef.on('value', room => { 
             const databaseRoom = room.val();
             const firebaseQuestions:FirebaseQuestions = databaseRoom.questions ?? {};
 
@@ -125,7 +126,17 @@ export function Room(){
                     </div>
                 </form>
 
-                {JSON.stringify(questions)};
+                <div className="question-list">
+                    {questions.map(question => { //map vai percorrer as perguntas e retornar as respostas
+                        return (
+                            <Question 
+                                key={question.id} //Identifica a diferença de uma pergunta para outra pelo id para performance. *Algoritmo de reconciliação 
+                                content={question.content}
+                                author={question.author}
+                            />
+                        );
+                    })}
+                </div> 
             </main>
         </div>
     );
